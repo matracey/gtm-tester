@@ -19,6 +19,9 @@
 </head>
 
 <body>
+  <!-- Dark Mode Toggle -->
+  <button id="darkModeToggle" class="btn btn-secondary position-fixed top-0 end-0 m-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px; font-size: 24px; z-index: 1050;" title="Toggle dark mode">🌙</button>
+
   <!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K39V3VMS" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- End Google Tag Manager (noscript) -->
@@ -86,6 +89,54 @@
   </div>
 
   <script>
+    // Dark Mode Toggle using Bootstrap's built-in dark mode
+    function initDarkMode() {
+      const html = document.documentElement;
+      const toggle = document.getElementById('darkModeToggle');
+      
+      // Check for saved preference or device preference
+      const savedTheme = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+      applyTheme(initialTheme);
+      
+      // Toggle dark mode on button click
+      toggle.addEventListener('click', function() {
+        const currentTheme = html.getAttribute('data-bs-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        applyTheme(newTheme);
+        localStorage.setItem('theme', newTheme);
+      });
+      
+      // Listen for system theme changes
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (!localStorage.getItem('theme')) {
+          applyTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+    }
+    
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      const toggle = document.getElementById('darkModeToggle');
+      
+      if (theme === 'dark') {
+        html.setAttribute('data-bs-theme', 'dark');
+        toggle.textContent = '☀️';
+      } else {
+        html.removeAttribute('data-bs-theme');
+        toggle.textContent = '🌙';
+      }
+    }
+    
+    // Initialize dark mode when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initDarkMode);
+    } else {
+      initDarkMode();
+    }
+
     // Log dataLayer events
     function logEvent(event) {
       const logDiv = document.getElementById('eventLog');
