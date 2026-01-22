@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTM Tag Test</title>
+  <!-- Google Tag Manager -->
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-K39V3VMS');</script>
+  <!-- End Google Tag Manager -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/css/bootstrap.min.css" integrity="sha512-2bBQCjcnw658Lho4nlXJcc6WkV/UxpE/sAokbXPxQNGqmNdQrWqtw26Ns9kFF/yG792pKR1Sx8/Y1Lf1XN4GKA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K39V3VMS" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div class="container mt-5">
+    <h1 class="mb-4">GTM Container Test</h1>
+    <p class="text-muted">Container ID: GTM-K39V3VMS</p>
+    
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Event Testing</h5>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <button class="btn btn-primary w-100" id="testButton">
+              Test Button Click
+            </button>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-success w-100" id="purchaseButton">
+              Test Purchase Event
+            </button>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-info w-100" id="customEvent">
+              Test Custom Event
+            </button>
+          </div>
+          <div class="col-md-6">
+            <button class="btn btn-warning w-100" id="addToCart">
+              Test Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5>Form Testing</h5>
+      </div>
+      <div class="card-body">
+        <form id="testForm">
+          <div class="mb-3">
+            <label for="emailInput" class="form-label">Email</label>
+            <input type="email" class="form-control" id="emailInput" placeholder="test@example.com">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit Form</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5>DataLayer Events Log</h5>
+      </div>
+      <div class="card-body">
+        <div id="eventLog" class="bg-light text-dark p-3 overflow-auto font-monospace" style="max-height: 22rem;">
+          <div class="text-muted">Events will appear here...</div>
+        </div>
+        <button class="btn btn-sm btn-outline-danger mt-2" id="clearLog">Clear Log</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Log dataLayer events
+    function logEvent(event) {
+      const logDiv = document.getElementById('eventLog');
+      const timestamp = new Date().toLocaleTimeString();
+      const eventDiv = document.createElement('div');
+      eventDiv.className = 'mb-2 pb-2 border-bottom';
+      eventDiv.innerHTML = `<strong>[${timestamp}]</strong> ${JSON.stringify(event, null, 2)}`;
+      
+      // Remove placeholder text on first event
+      if (logDiv.querySelector('.text-muted')) {
+        logDiv.innerHTML = '';
+      }
+      
+      logDiv.appendChild(eventDiv);
+      logDiv.scrollTop = logDiv.scrollHeight;
+    }
+
+    // Test Button Click
+    document.getElementById('testButton').addEventListener('click', function() {
+      const event = {
+        'event': 'button_click',
+        'button_name': 'Test Button',
+        'timestamp': new Date().toISOString()
+      };
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(event);
+      logEvent(event);
+      console.log('GTM Event pushed:', event);
+    });
+
+    // Test Purchase Event
+    document.getElementById('purchaseButton').addEventListener('click', function() {
+      const event = {
+        'event': 'purchase',
+        'ecommerce': {
+          'transaction_id': 'T_' + Date.now(),
+          'value': 99.99,
+          'currency': 'USD',
+          'items': [{
+            'item_id': 'SKU_001',
+            'item_name': 'Test Product',
+            'price': 99.99,
+            'quantity': 1
+          }]
+        }
+      };
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(event);
+      logEvent(event);
+      console.log('GTM Event pushed:', event);
+    });
+
+    // Test Custom Event
+    document.getElementById('customEvent').addEventListener('click', function() {
+      const event = {
+        'event': 'custom_interaction',
+        'interaction_type': 'test',
+        'user_action': 'custom_button_clicked'
+      };
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(event);
+      logEvent(event);
+      console.log('GTM Event pushed:', event);
+    });
+
+    // Test Add to Cart
+    document.getElementById('addToCart').addEventListener('click', function() {
+      const event = {
+        'event': 'add_to_cart',
+        'ecommerce': {
+          'items': [{
+            'item_id': 'SKU_002',
+            'item_name': 'Sample Item',
+            'price': 49.99,
+            'quantity': 1
+          }]
+        }
+      };
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(event);
+      logEvent(event);
+      console.log('GTM Event pushed:', event);
+    });
+
+    // Test Form Submission
+    document.getElementById('testForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailInput').value;
+      const event = {
+        'event': 'form_submit',
+        'form_id': 'testForm',
+        'form_email': email ? 'provided' : 'empty'
+      };
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push(event);
+      logEvent(event);
+      console.log('GTM Event pushed:', event);
+      alert('Form submitted! Check the event log.');
+    });
+
+    // Clear log
+    document.getElementById('clearLog').addEventListener('click', function() {
+      document.getElementById('eventLog').innerHTML = '<div class="text-muted">Events will appear here...</div>';
+    });
+
+    // Log page view
+    window.addEventListener('load', function() {
+      console.log('GTM Container loaded. DataLayer:', window.dataLayer);
+      logEvent({'event': 'page_loaded', 'page': window.location.href});
+    });
+  </script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js" integrity="sha512-nKXmKvJyiGQy343jatQlzDprflyB5c+tKCzGP3Uq67v+lmzfnZUi/ZT+fc6ITZfSC5HhaBKUIvr/nTLCV+7F+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</body>
+
+</html>
